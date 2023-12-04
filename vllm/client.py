@@ -61,12 +61,11 @@ async def main(args, api_url, n):
     # for prompt in data_iter:
     for prompt in prompts:
         if time.time() - start_time < send_request_duration:
-            poisson_delay = np.random.poisson(10 * args.delay / 1.4)  # 使用调整后的lambda值
-            if 0.2 <= poisson_delay <= 50:
-                asyncio.create_task(post_http_request(prompt[0], api_url, n))
-                with open("delay.txt", 'a') as f:
-                    f.write(f"poisson_delay:{poisson_delay / 10}\n")
-                await asyncio.sleep(poisson_delay / 10)
+            exp_delay = np.random.exponential(args.delay / 1.4)  # 使用调整后的lambda值
+            asyncio.create_task(post_http_request(prompt[0], api_url, n))
+            with open("delay.txt", 'a') as f:
+                f.write(f"poisson_delay:{exp_delay / 10}\n")
+            await asyncio.sleep(exp_delay)
         
         else:
             remaining_time = period - (time.time() - start_time)

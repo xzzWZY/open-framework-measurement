@@ -65,11 +65,8 @@ def main(input_file, sleep_time, period_time=20):
             thread.start()
 
             request_id += 1
-            while True:
-                poisson_delay = np.random.poisson(10 * sleep_time / 1.4)
-                if 0.2 <= poisson_delay <= 50:
-                    break
-            time.sleep(poisson_delay / 10)  # 每 sleep_time / 1.4 秒启动一个新线程
+            exp_delay = np.random.exponential(sleep_time / 1.4)
+            time.sleep(exp_delay)  # 每 sleep_time / 1.4 秒启动一个新线程
         else:
             time.sleep(period_time - (current_time - start_time))
 
